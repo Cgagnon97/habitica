@@ -1,5 +1,5 @@
 <template lang="pug">
-b-modal#invite-modal(:title="$t('inviteFriends')", size='lg')
+b-modal#invite-modal(:title="$t('inviteFriends')", size='md')
   .modal-body
     p.alert.alert-info(v-html="$t('inviteAlertInfo')")
     .form-horizontal
@@ -16,6 +16,9 @@ b-modal#invite-modal(:title="$t('inviteFriends')", size='lg')
                 button.btn.btn-primary.pull-right(@click='addUuid()')
                   i.glyphicon.glyphicon-plus
                   | +
+                button.btn.btn-primary.pull-right(@click='removeUuid()')
+                  i.glyphicon.glyphicon-plus
+                  | -
           tr
             td
               .col-6.col-offset-6
@@ -39,6 +42,9 @@ b-modal#invite-modal(:title="$t('inviteFriends')", size='lg')
               button.btn.btn-primary.pull-right(@click='addEmail()')
                 i.glyphicon.glyphicon-plus
                 | +
+              button.btn.btn-primary.pull-right(@click='removeEmail()')
+                i.glyphicon.glyphicon-plus
+                | -
           tr
             td.form-group(colspan=2)
               label.col-sm-1.control-label {{ $t('byColon') }}
@@ -85,11 +91,21 @@ export default {
     },
   },
   methods: {
+    resetUuid () {
+      this.invitees = [];
+      this.emails = [];
+    },
     addUuid () {
       this.invitees.push({uuid: ''});
     },
+    removeUuid () {
+      this.invitees.pop();
+    },
     addEmail () {
       this.emails.push({name: '', email: ''});
+    },
+    removeEmail () {
+      this.emails.pop();
     },
     inviteNewUsers (inviteMethod) {
       if (!this.group._id) {
@@ -104,6 +120,7 @@ export default {
       }
 
       this.inviteByMethod(inviteMethod);
+      
     },
     async inviteByMethod (inviteMethod) {
       let invitationDetails;
